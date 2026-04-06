@@ -353,8 +353,16 @@ function calculateTotalActiveMinutes() {
     document.getElementById('totalActiveMinutes').value = hiit + cardio;
 }
 
-function handleFormSubmit(e) {
+async function handleFormSubmit(e) {
     e.preventDefault();
+
+    // Show loading state
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Submit All Data';
+    if (submitBtn) {
+        submitBtn.innerHTML = '⏳ Saving to Google Sheets...';
+        submitBtn.disabled = true;
+    }
 
     // Collect health data
     const healthEntry = {
@@ -478,8 +486,10 @@ function handleFormSubmit(e) {
     updateDashboard();
 
     // Restore button
-    submitBtn.innerHTML = originalBtnText;
-    submitBtn.disabled = false;
+    if (submitBtn) {
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+    }
 }
 
 function showSuccessMessage(message) {

@@ -14,8 +14,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #121212;
-            color: #ffffff;
+            background: #f0f2f5;
+            color: #121212;
         }
 
         .app-container {
@@ -26,8 +26,8 @@
         /* SIDEBAR */
         .sidebar {
             width: 260px;
-            background: #1e1e1e;
-            border-right: 1px solid #333333;
+            background: #ffffff;
+            border-right: 1px solid #e0e0e0;
             padding: 24px 0;
             overflow-y: auto;
             position: fixed;
@@ -39,13 +39,13 @@
         .sidebar-brand {
             padding: 0 20px 24px;
             margin-bottom: 24px;
-            border-bottom: 1px solid #333333;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .brand-name {
             font-size: 1.2rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #ffffff, #cccccc);
+            background: linear-gradient(135deg, #121212, #444444);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -54,7 +54,7 @@
 
         .brand-tagline {
             font-size: 0.75rem;
-            color: #888888;
+            color: #666666;
         }
 
         .nav-section {
@@ -67,7 +67,7 @@
             margin-bottom: 12px;
             font-size: 0.75rem;
             text-transform: uppercase;
-            color: #666666;
+            color: #888888;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
@@ -77,7 +77,7 @@
             align-items: center;
             gap: 12px;
             padding: 12px 20px;
-            color: #b0b0b0;
+            color: #555555;
             cursor: pointer;
             transition: all 0.3s ease;
             border-left: 3px solid transparent;
@@ -85,14 +85,14 @@
         }
 
         .nav-link:hover {
-            background: rgba(204, 204, 204, 0.1);
-            color: #ffffff;
+            background: rgba(0, 0, 0, 0.05);
+            color: #121212;
         }
 
         .nav-link.active {
-            background: rgba(204, 204, 204, 0.15);
-            color: #ffffff;
-            border-left-color: #cccccc;
+            background: rgba(0, 0, 0, 0.08);
+            color: #121212;
+            border-left-color: #121212;
         }
 
         .nav-icon {
@@ -134,7 +134,7 @@
             align-items: center;
             margin-bottom: 40px;
             padding-bottom: 20px;
-            border-bottom: 1px solid #333333;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .top-bar h1 {
@@ -152,22 +152,23 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #ffffff, #cccccc);
+            background: linear-gradient(135deg, #333333, #121212);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #121212;
+            color: #ffffff;
             font-weight: 600;
         }
 
         .motivational-message {
-            background: rgba(204, 204, 204, 0.1);
-            border-left: 4px solid #cccccc;
+            background: #ffffff;
+            border-left: 4px solid #333333;
             padding: 16px;
             border-radius: 6px;
             margin-bottom: 30px;
             font-style: italic;
-            color: #d0d0d0;
+            color: #444444;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .content-wrapper {
@@ -180,19 +181,20 @@
 
         /* FORMS AND CARDS */
         .form-section {
-            background: #1e1e1e;
+            background: #ffffff;
             padding: 30px;
             border-radius: 8px;
             margin-bottom: 24px;
-            border: 1px solid #333333;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .form-section h2 {
             font-size: 1.3rem;
             margin-bottom: 24px;
-            color: #ffffff;
+            color: #121212;
             padding-bottom: 12px;
-            border-bottom: 1px solid #333333;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .form-row {
@@ -209,7 +211,7 @@
 
         .form-group label {
             margin-bottom: 8px;
-            color: #cccccc;
+            color: #444444;
             font-size: 0.95rem;
             font-weight: 500;
         }
@@ -218,10 +220,10 @@
         .form-group select,
         .form-group textarea {
             padding: 10px 12px;
-            background: #2a2a2a;
-            border: 1px solid #404040;
+            background: #f9f9f9;
+            border: 1px solid #cccccc;
             border-radius: 6px;
-            color: #ffffff;
+            color: #121212;
             font-size: 0.95rem;
             transition: all 0.3s ease;
             font-family: inherit;
@@ -231,13 +233,13 @@
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #cccccc;
-            box-shadow: 0 0 0 3px rgba(204, 204, 204, 0.1);
+            border-color: #888888;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
         }
 
         .form-group input::placeholder,
         .form-group textarea::placeholder {
-            color: #666666;
+            color: #999999;
         }
 
         .form-group textarea {
@@ -251,8 +253,8 @@
 
         .btn-submit {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #ffffff, #cccccc);
-            color: #121212;
+            background: linear-gradient(135deg, #333333, #121212);
+            color: #ffffff;
             border: none;
             border-radius: 6px;
             font-size: 1rem;
@@ -265,7 +267,7 @@
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(204, 204, 204, 0.25);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
         .btn-submit:active {
@@ -281,14 +283,15 @@
         }
 
         .stat-card {
-            background: #1e1e1e;
+            background: #ffffff;
             padding: 24px;
             border-radius: 8px;
-            border: 1px solid #333333;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .stat-label {
-            color: #888888;
+            color: #666666;
             font-size: 0.85rem;
             text-transform: uppercase;
             margin-bottom: 8px;
@@ -299,19 +302,19 @@
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #ffffff;
+            color: #121212;
             margin-bottom: 8px;
         }
 
         .stat-subtext {
             font-size: 0.9rem;
-            color: #b0b0b0;
+            color: #666666;
         }
 
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: #2a2a2a;
+            background: #e0e0e0;
             border-radius: 4px;
             overflow: hidden;
             margin-top: 12px;
@@ -319,20 +322,21 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #ffffff, #cccccc);
+            background: linear-gradient(90deg, #333333, #121212);
             width: 0%;
             transition: width 0.3s ease;
         }
 
         /* CHARTS */
         .chart-container {
-            background: #1e1e1e;
+            background: #ffffff;
             padding: 24px;
             border-radius: 8px;
             margin-bottom: 24px;
-            border: 1px solid #333333;
+            border: 1px solid #e0e0e0;
             position: relative;
             height: 400px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .chart-title {
@@ -343,10 +347,11 @@
 
         /* GOALS SECTION */
         .goal-item {
-            background: #2a2a2a;
+            background: #f9f9f9;
             padding: 16px;
             border-radius: 6px;
             margin-bottom: 12px;
+            border: 1px solid #e0e0e0;
         }
 
         .goal-header {
@@ -357,11 +362,11 @@
 
         .goal-name {
             font-weight: 600;
-            color: #ffffff;
+            color: #121212;
         }
 
         .goal-progress {
-            color: #888888;
+            color: #666666;
             font-size: 0.9rem;
         }
 
@@ -517,7 +522,7 @@
 
                 <div class="form-section">
                     <h2>📋 Quick Insights</h2>
-                    <div id="insightsContainer" style="line-height: 1.8; color: #b0b0b0;"></div>
+                    <div id="insightsContainer" style="line-height: 1.8; color: #444444;"></div>
                 </div>
             </div>
 
@@ -554,7 +559,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Total Active Minutes (auto)</label>
-                                <input type="number" id="totalActiveMinutes" readonly style="background: #3a3a3a;">
+                                <input type="number" id="totalActiveMinutes" readonly style="background: #e0e0e0;">
                             </div>
                         </div>
 
@@ -576,7 +581,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Sleep Duration (auto)</label>
-                                <input type="number" id="sleepDuration" readonly style="background: #3a3a3a;" placeholder="Auto-calculated">
+                                <input type="number" id="sleepDuration" readonly style="background: #e0e0e0;" placeholder="Auto-calculated">
                             </div>
                             <div class="form-group">
                                 <label>Blood Pressure (optional)</label>
@@ -591,12 +596,12 @@
 
                         <div id="foodEntries"></div>
 
-                        <button type="button" class="btn-submit" style="background: rgba(204, 204, 204, 0.2); margin-top: 0;" id="addFoodBtn">+ Add Food Item</button>
+                        <button type="button" class="btn-submit" style="background: #e0e0e0; color: #121212; margin-top: 0;" id="addFoodBtn">+ Add Food Item</button>
 
                         <div class="form-row full" style="margin-top: 20px;">
                             <div class="form-group">
                                 <label>Daily Total Calories</label>
-                                <input type="number" id="dailyTotalCalories" readonly style="background: #3a3a3a; font-size: 1.2rem; font-weight: bold;">
+                                <input type="number" id="dailyTotalCalories" readonly style="background: #e0e0e0; font-size: 1.2rem; font-weight: bold;">
                             </div>
                         </div>
                     </div>
@@ -607,12 +612,12 @@
 
                         <div id="expenseEntries"></div>
 
-                        <button type="button" class="btn-submit" style="background: rgba(204, 204, 204, 0.2); margin-top: 0;" id="addExpenseBtn">+ Add Expense</button>
+                        <button type="button" class="btn-submit" style="background: #e0e0e0; color: #121212; margin-top: 0;" id="addExpenseBtn">+ Add Expense</button>
 
                         <div class="form-row full" style="margin-top: 20px;">
                             <div class="form-group">
                                 <label>Daily Total Spent</label>
-                                <input type="number" id="dailyTotalSpent" readonly style="background: #3a3a3a; font-size: 1.2rem; font-weight: bold;">
+                                <input type="number" id="dailyTotalSpent" readonly style="background: #e0e0e0; font-size: 1.2rem; font-weight: bold;">
                             </div>
                         </div>
                     </div>

@@ -163,10 +163,10 @@ function addFoodEntry() {
     appState.foodEntryCount++;
 
     const foodEntry = document.createElement('div');
-    foodEntry.style.cssText = 'background: #2a2a2a; padding: 16px; border-radius: 6px; margin-bottom: 12px;';
+    foodEntry.style.cssText = 'background: #f9f9f9; border: 1px solid #e0e0e0; padding: 16px; border-radius: 6px; margin-bottom: 12px;';
     foodEntry.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h4 style="color: #cccccc; margin: 0;">Food Item ${entryId}</h4>
+            <h4 style="color: #121212; margin: 0;">Food Item ${entryId}</h4>
             <button type="button" class="remove-btn" data-entry="${entryId}" style="background: rgba(255, 75, 75, 0.2); border: 1px solid rgba(255, 75, 75, 0.5); color: #ff6b6b; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Remove</button>
         </div>
 
@@ -203,7 +203,7 @@ function addFoodEntry() {
             </div>
             <div class="form-group">
                 <label>Calories (auto)</label>
-                <input type="number" class="foodCalories" data-entry="${entryId}" readonly style="background: #3a3a3a;" placeholder="Auto-calculated">
+                <input type="number" class="foodCalories" data-entry="${entryId}" readonly style="background: #e0e0e0;" placeholder="Auto-calculated">
             </div>
             <div class="form-group">
                 <label>Sugar Level Estimate</label>
@@ -251,10 +251,10 @@ function addExpenseEntry() {
     appState.expenseEntryCount++;
 
     const expenseEntry = document.createElement('div');
-    expenseEntry.style.cssText = 'background: #2a2a2a; padding: 16px; border-radius: 6px; margin-bottom: 12px;';
+    expenseEntry.style.cssText = 'background: #f9f9f9; border: 1px solid #e0e0e0; padding: 16px; border-radius: 6px; margin-bottom: 12px;';
     expenseEntry.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h4 style="color: #cccccc; margin: 0;">Expense ${entryId}</h4>
+            <h4 style="color: #121212; margin: 0;">Expense ${entryId}</h4>
             <button type="button" class="remove-expense" data-entry="${entryId}" style="background: rgba(255, 75, 75, 0.2); border: 1px solid rgba(255, 75, 75, 0.5); color: #ff6b6b; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Remove</button>
         </div>
 
@@ -544,7 +544,7 @@ function updateInsights(health, food, expenses) {
 
     const insightsDiv = document.getElementById('insightsContainer');
     if (insights.length === 0) {
-        insightsDiv.innerHTML = '<p style="color: #888;">No data yet. Add an entry to see insights!</p>';
+        insightsDiv.innerHTML = '<p style="color: #666;">No data yet. Add an entry to see insights!</p>';
     } else {
         insightsDiv.innerHTML = insights.map(i => `<p>• ${i}</p>`).join('');
     }
@@ -569,8 +569,8 @@ function initializeCharts() {
             datasets: [{
                 label: 'Weight (kg)',
                 data: last30Days.weights,
-                borderColor: '#cccccc',
-                backgroundColor: 'rgba(204, 204, 204, 0.1)',
+                borderColor: '#333333',
+                backgroundColor: 'rgba(0, 0, 0, 0.05)',
                 borderWidth: 2,
                 fill: true,
                 tension: 0.4
@@ -585,12 +585,12 @@ function initializeCharts() {
             scales: {
                 y: {
                     beginAtZero: false,
-                    grid: { color: '#333333' },
-                    ticks: { color: '#888888' }
+                    grid: { color: '#e0e0e0' },
+                    ticks: { color: '#666666' }
                 },
                 x: {
-                    grid: { color: '#333333' },
-                    ticks: { color: '#888888' }
+                    grid: { color: '#e0e0e0' },
+                    ticks: { color: '#666666' }
                 }
             }
         }
@@ -608,7 +608,7 @@ function initializeCharts() {
             datasets: [{
                 label: 'Steps',
                 data: getLast7DaysData().steps,
-                backgroundColor: '#cccccc',
+                backgroundColor: '#333333',
                 borderRadius: 4
             }]
         },
@@ -621,12 +621,12 @@ function initializeCharts() {
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: { color: '#333333' },
-                    ticks: { color: '#888888' }
+                    grid: { color: '#e0e0e0' },
+                    ticks: { color: '#666666' }
                 },
                 x: {
-                    grid: { color: '#333333' },
-                    ticks: { color: '#888888' }
+                    grid: { color: '#e0e0e0' },
+                    ticks: { color: '#666666' }
                 }
             }
         }
@@ -644,8 +644,8 @@ function initializeCharts() {
             datasets: [{
                 label: 'Calories',
                 data: getLast7DaysData().calories,
-                borderColor: '#cccccc',
-                backgroundColor: 'rgba(204, 204, 204, 0.1)',
+                borderColor: '#333333',
+                backgroundColor: 'rgba(0, 0, 0, 0.05)',
                 borderWidth: 2,
                 fill: true,
                 tension: 0.4
@@ -660,12 +660,12 @@ function initializeCharts() {
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: { color: '#333333' },
-                    ticks: { color: '#888888' }
+                    grid: { color: '#e0e0e0' },
+                    ticks: { color: '#666666' }
                 },
                 x: {
-                    grid: { color: '#333333' },
-                    ticks: { color: '#888888' }
+                    grid: { color: '#e0e0e0' },
+                    ticks: { color: '#666666' }
                 }
             }
         }
@@ -694,14 +694,14 @@ function initializeCharts() {
             labels: Object.keys(expenseByCategory),
             datasets: [{
                 data: Object.values(expenseByCategory),
-                backgroundColor: ['#ffffff', '#cccccc', '#aaaaaa', '#888888']
+                backgroundColor: ['#121212', '#444444', '#777777', '#aaaaaa']
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { labels: { color: '#888888' } }
+                legend: { labels: { color: '#666666' } }
             }
         }
     });
@@ -718,8 +718,8 @@ function initializeCharts() {
             datasets: [{
                 label: 'Sleep Hours',
                 data: getLast7DaysData().sleep,
-                borderColor: '#cccccc',
-                backgroundColor: 'rgba(204, 204, 204, 0.2)',
+                borderColor: '#333333',
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
                 borderWidth: 2
             }]
         },
@@ -727,12 +727,12 @@ function initializeCharts() {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { labels: { color: '#888888' } }
+                legend: { labels: { color: '#666666' } }
             },
             scales: {
                 r: {
-                    grid: { color: '#333333' },
-                    ticks: { color: '#888888' }
+                    grid: { color: '#e0e0e0' },
+                    ticks: { color: '#666666' }
                 }
             }
         }
@@ -817,22 +817,22 @@ function loadGoalsUI() {
     // Show progress
     const goalsContainer = document.getElementById('goalsContainer');
     goalsContainer.innerHTML = `
-        <div class="stat-card" style="border: 1px solid #333333;">
+        <div class="stat-card" style="border: 1px solid #e0e0e0;">
             <div class="stat-label">Target Weight</div>
             <div class="stat-value">${appState.goals.targetWeight} kg</div>
         </div>
 
-        <div class="stat-card" style="border: 1px solid #333333;">
+        <div class="stat-card" style="border: 1px solid #e0e0e0;">
             <div class="stat-label">Daily Steps Goal</div>
             <div class="stat-value">${appState.goals.dailyStepsGoal.toLocaleString()}</div>
         </div>
 
-        <div class="stat-card" style="border: 1px solid #333333;">
+        <div class="stat-card" style="border: 1px solid #e0e0e0;">
             <div class="stat-label">Daily Budget</div>
             <div class="stat-value">₹${appState.goals.budgetLimit}</div>
         </div>
 
-        <div class="stat-card" style="border: 1px solid #333333;">
+        <div class="stat-card" style="border: 1px solid #e0e0e0;">
             <div class="stat-label">Target Calories</div>
             <div class="stat-value">${appState.goals.targetCalories}</div>
         </div>

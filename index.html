@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monk Health by Kiran Kumar</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="left-section">
+                <h1>Monk Health<br>by Kiran Kumar</h1>
+                <p class="tagline">Eat less. Walk more. Live better.</p>
+
+                <div class="quotes-container">
+                    <div class="quote">Small steps daily create big results.</div>
+                    <div class="quote">Discipline is the bridge between dreams and reality.</div>
+                    <div class="quote">Your health is your wealth. Invest wisely.</div>
+                </div>
+
+                <div class="ikigai-section">
+                    <h3>🎯 Ikigai Philosophy</h3>
+                    <p>Find your reason for being through mindful living, health tracking, and purposeful action.</p>
+                    <div class="philosophy-points">
+                        <div class="philosophy-point"><span>Track what matters: health, nutrition, and finances</span></div>
+                        <div class="philosophy-point"><span>Build discipline through consistent daily habits</span></div>
+                        <div class="philosophy-point"><span>Achieve balance in mind, body, and spirit</span></div>
+                        <div class="philosophy-point"><span>Live with intention and self-awareness</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <div class="login-card">
+                    <h2>Enter Dashboard</h2>
+                    <p class="subtitle">Login to your monk health journey</p>
+
+                    <div class="error-message" id="errorMessage"></div>
+
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="userId">ID</label>
+                            <input type="text" id="userId" name="userId" placeholder="Enter your ID" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        </div>
+
+                        <button type="submit" class="btn-login">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const userId = document.getElementById('userId').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('errorMessage');
+
+            if (!userId || !password) {
+                errorDiv.textContent = 'Please enter both ID and password';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                // Call Google Apps Script Web App endpoint
+                const response = await fetch('YOUR_GAS_WEBAPP_URL_HERE', {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        action: 'authenticate',
+                        userId: userId,
+                        password: password
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Store session data
+                    sessionStorage.setItem('userID', userId);
+                    sessionStorage.setItem('sessionToken', result.token);
+                    sessionStorage.setItem('userName', result.userName);
+                    
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    errorDiv.textContent = result.message || 'Invalid credentials. Please try again.';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = 'Connection error. Please try again.';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

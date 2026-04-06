@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monk Health - Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #121212;
+            color: #ffffff;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: #1e1e1e;
+            border-right: 1px solid #333333;
+            padding: 24px 0;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 20px 24px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #333333;
+        }
+
+        .brand-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #cccccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: #888888;
+        }
+
+        .nav-section {
+            padding: 0;
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            padding: 0 20px;
+            margin-bottom: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #666666;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #b0b0b0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            background: rgba(204, 204, 204, 0.1);
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background: rgba(204, 204, 204, 0.15);
+            color: #ffffff;
+            border-left-color: #cccccc;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            padding: 10px;
+            background: rgba(255, 75, 75, 0.2);
+            border: 1px solid rgba(255, 75, 75, 0.5);
+            color: #ff6b6b;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 75, 75, 0.3);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333333;
+        }
+
+        .top-bar h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffffff, #cccccc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #121212;
+            font-weight: 600;
+        }
+
+        .motivational-message {
+            background: rgba(204, 204, 204, 0.1);
+            border-left: 4px solid #cccccc;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            font-style: italic;
+            color: #d0d0d0;
+        }
+
+        .content-wrapper {
+            display: none;
+        }
+
+        .content-wrapper.active {
+            display: block;
+        }
+
+        /* FORMS AND CARDS */
+        .form-section {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border: 1px solid #333333;
+        }
+
+        .form-section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 24px;
+            color: #ffffff;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #333333;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            color: #cccccc;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 12px;
+            background: #2a2a2a;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #cccccc;
+            box-shadow: 0 0 0 3px rgba(204, 204, 204, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #666666;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .btn-submit {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ffffff, #cccccc);
+            color: #121212;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(204, 204, 204, 0.25);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* CARDS GRID */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #1e1e1e;
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid #333333;
+        }
+
+        .stat-label {
+            color: #888888;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .stat-subtext {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #2a2a2a;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffffff, #cccccc);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* CHARTS */
+        .chart-container {
+            background: #1e1e1e;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border: 1px solid #333333;
+            position: relative;
+            height: 400px;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* GOALS SECTION */
+        .goal-item {
+            background: #2a2a2a;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .goal-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .goal-progress {
+            color: #888888;
+            font-size: 0.9rem;
+        }
+
+        .goals-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: #81c784;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .goals-input-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-name">Monk Health</div>
+                <div class="brand-tagline">by Kiran Kumar</div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <div class="nav-link active" data-view="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-link" data-view="entry">
+                    <span class="nav-icon">➕</span>
+                    <span>Add Entry</span>
+                </div>
+                <div class="nav-link" data-view="visualization">
+                    <span class="nav-icon">📈</span>
+                    <span>Data Visualization</span>
+                </div>
+                <div class="nav-link" data-view="goals">
+                    <span class="nav-icon">🎯</span>
+                    <span>Goals</span>
+                </div>
+            </div>
+
+            <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="top-bar">
+                <div>
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userInitial">M</div>
+                    <div id="userName">User</div>
+                </div>
+            </div>
+
+            <div class="motivational-message">
+                💡 Small steps daily create big results.
+            </div>
+
+            <div class="success-message" id="successMessage"></div>
+
+            <!-- DASHBOARD VIEW -->
+            <div class="content-wrapper active" id="dashboardView">
+                <div class="cards-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Today's Steps</div>
+                        <div class="stat-value" id="todaySteps">0</div>
+                        <div class="stat-subtext">Goal: 10000 steps</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="stepsProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Calories Intake</div>
+                        <div class="stat-value" id="todayCalories">0</div>
+                        <div class="stat-subtext">Healthy range</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="caloriesProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Sleep Duration</div>
+                        <div class="stat-value" id="todaySleep">0h</div>
+                        <div class="stat-subtext">Target: 8 hours</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="sleepProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Daily Spending</div>
+                        <div class="stat-value" id="todaySpent">₹0</div>
+                        <div class="stat-subtext">Budget: ₹500</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="spendProgress"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Weight</div>
+                        <div class="stat-value" id="currentWeight">0</div>
+                        <div class="stat-subtext">kg</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Water Intake</div>
+                        <div class="stat-value" id="waterIntake">0</div>
+                        <div class="stat-subtext">liters (Target: 3L)</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>📋 Quick Insights</h2>
+                    <div id="insightsContainer" style="line-height: 1.8; color: #b0b0b0;"></div>
+                </div>
+            </div>
+
+            <!-- ADD ENTRY VIEW -->
+            <div class="content-wrapper" id="entryView">
+                <form id="mainForm">
+                    <!-- SECTION 1: HEALTH TRACKER -->
+                    <div class="form-section">
+                        <h2>🏃 Section 1: Health Tracker</h2>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Wake-up Time</label>
+                                <input type="datetime-local" id="wakeupTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Sleep Time</label>
+                                <input type="datetime-local" id="sleepTime" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>HIIT Duration (minutes)</label>
+                                <input type="number" id="hiitDuration" min="0" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Cardio Duration (minutes)</label>
+                                <input type="number" id="cardioDuration" min="0" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Total Active Minutes (auto)</label>
+                                <input type="number" id="totalActiveMinutes" readonly style="background: #3a3a3a;">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Steps Walked</label>
+                                <input type="number" id="steps" min="0" placeholder="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Water Intake (liters)</label>
+                                <input type="number" id="waterIntakeLiters" min="0" step="0.5" placeholder="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Weight (kg)</label>
+                                <input type="number" id="weight" min="0" step="0.1" placeholder="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Sleep Duration (auto)</label>
+                                <input type="number" id="sleepDuration" readonly style="background: #3a3a3a;" placeholder="Auto-calculated">
+                            </div>
+                            <div class="form-group">
+                                <label>Blood Pressure (optional)</label>
+                                <input type="text" id="bloodPressure" placeholder="e.g., 120/80">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: FOOD TRACKER -->
+                    <div class="form-section">
+                        <h2>🍽️ Section 2: Food Tracker</h2>
+
+                        <div id="foodEntries"></div>
+
+                        <button type="button" class="btn-submit" style="background: rgba(204, 204, 204, 0.2); margin-top: 0;" id="addFoodBtn">+ Add Food Item</button>
+
+                        <div class="form-row full" style="margin-top: 20px;">
+                            <div class="form-group">
+                                <label>Daily Total Calories</label>
+                                <input type="number" id="dailyTotalCalories" readonly style="background: #3a3a3a; font-size: 1.2rem; font-weight: bold;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: EXPENSE TRACKER -->
+                    <div class="form-section">
+                        <h2>💰 Section 3: Expense Tracker</h2>
+
+                        <div id="expenseEntries"></div>
+
+                        <button type="button" class="btn-submit" style="background: rgba(204, 204, 204, 0.2); margin-top: 0;" id="addExpenseBtn">+ Add Expense</button>
+
+                        <div class="form-row full" style="margin-top: 20px;">
+                            <div class="form-group">
+                                <label>Daily Total Spent</label>
+                                <input type="number" id="dailyTotalSpent" readonly style="background: #3a3a3a; font-size: 1.2rem; font-weight: bold;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">✅ Submit All Data</button>
+                </form>
+            </div>
+
+            <!-- DATA VISUALIZATION VIEW -->
+            <div class="content-wrapper" id="visualizationView">
+                <div class="chart-container">
+                    <div class="chart-title">📊 Weight Progress (Last 30 Days)</div>
+                    <canvas id="weightChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">👣 Steps Trend (Last 7 Days)</div>
+                    <canvas id="stepsChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">🔥 Calories Intake (Last 7 Days)</div>
+                    <canvas id="caloriesChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">💸 Expense Breakdown (Today)</div>
+                    <canvas id="expenseChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">😴 Sleep Tracking (Last 7 Days)</div>
+                    <canvas id="sleepChart"></canvas>
+                </div>
+            </div>
+
+            <!-- GOALS VIEW -->
+            <div class="content-wrapper" id="goalsView">
+                <div class="form-section">
+                    <h2>🎯 Your Health Goals</h2>
+
+                    <div id="goalsContainer"></div>
+
+                    <div class="goals-input-group" style="margin-top: 30px;">
+                        <div class="form-group">
+                            <label>Set Target Weight (kg)</label>
+                            <input type="number" id="targetWeight" min="0" step="0.1" placeholder="75">
+                        </div>
+                        <div class="form-group">
+                            <label>Daily Steps Goal</label>
+                            <input type="number" id="dailyStepsGoal" min="0" step="100" placeholder="10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Daily Budget Limit (₹)</label>
+                            <input type="number" id="budgetLimit" min="0" step="10" placeholder="500">
+                        </div>
+                        <div class="form-group">
+                            <label>Target Calories per Day</label>
+                            <input type="number" id="targetCalories" min="0" step="50" placeholder="2000">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-submit" id="saveGoalsBtn">💾 Save Goals</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

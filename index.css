@@ -1,0 +1,253 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+    min-height: 100vh;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    width: 100%;
+}
+
+.left-section h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #ffffff, #cccccc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.tagline {
+    font-size: 1.3rem;
+    color: #cccccc;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+.quotes-container {
+    background: rgba(30, 30, 30, 0.6);
+    border-left: 4px solid #cccccc;
+    padding: 24px;
+    margin-bottom: 40px;
+    border-radius: 8px;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.quote {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #e0e0e0;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeInOut 10s ease-in-out infinite;
+}
+
+.quote:nth-child(2) {
+    animation-delay: 10s;
+}
+
+.quote:nth-child(3) {
+    animation-delay: 20s;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.ikigai-section {
+    background: rgba(30, 30, 30, 0.5);
+    padding: 24px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+}
+
+.ikigai-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    color: #cccccc;
+}
+
+.ikigai-section p {
+    line-height: 1.8;
+    color: #b0b0b0;
+    margin-bottom: 12px;
+}
+
+.philosophy-points {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.philosophy-point {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.philosophy-point::before {
+    content: "→";
+    color: #cccccc;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.philosophy-point span {
+    color: #b0b0b0;
+}
+
+.right-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    background: #1e1e1e;
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(204, 204, 204, 0.2);
+}
+
+.login-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.login-card .subtitle {
+    text-align: center;
+    color: #888888;
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #cccccc;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    background: #2a2a2a;
+    border: 1px solid #404040;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #cccccc;
+    box-shadow: 0 0 0 3px rgba(204, 204, 204, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #666666;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #ffffff, #cccccc);
+    color: #121212;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(204, 204, 204, 0.25);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+.error-message {
+    background: rgba(220, 53, 69, 0.15);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+    color: #ff6b6b;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.demo-info {
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid rgba(76, 175, 80, 0.5);
+    color: #81c784;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .left-section h1 {
+        font-size: 2.2rem;
+    }
+
+    .login-card {
+        max-width: 100%;
+    }
+
+    .ikigai-section {
+        display: none;
+    }
+}

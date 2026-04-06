@@ -260,7 +260,7 @@ function addExpenseEntry() {
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
             <div class="form-group">
-                <label>Amount Spent (₹)</label>
+                <label>Amount Spent (£)</label>
                 <input type="number" class="expenseAmount" name="foodAmount" data-entry="${entryId}" min="0" step="0.01" placeholder="0">
             </div>
             <div class="form-group">
@@ -367,6 +367,8 @@ function handleFormSubmit(e) {
         steps: parseInt(document.getElementById('steps').value) || 0,
         waterIntake: parseFloat(document.getElementById('waterIntakeLiters').value) || 0,
         weight: parseFloat(document.getElementById('weight').value) || 0,
+        height: parseFloat(document.getElementById('height').value) || 0,
+        waist: parseFloat(document.getElementById('waist').value) || 0,
         sleepDuration: parseFloat(document.getElementById('sleepDuration').value) || 0,
         bloodPressure: document.getElementById('bloodPressure').value || 'N/A'
     };
@@ -414,8 +416,51 @@ function handleFormSubmit(e) {
 
     localStorage.setItem(dataKey, JSON.stringify(allData));
 
-    // Show success message
-    showSuccessMessage('✅ Data saved successfully!');
+    // Save to Google Sheets
+    try {
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykE-_ewzqhc3hPczzMYoH7qWuHOmrGha6L8f73dDyw-mvkb41cH27VP9JLE16qG9D1/exec';
+        
+        // Send Health Data
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'saveHealthData',
+                userId: appState.userId,
+                data: healthEntry
+            })
+        });
+
+        // Send Food Data
+        if (allData.food.length > 0) {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'saveFoodData',
+                    userId: appState.userId,
+                    date: healthEntry.date,
+                    data: allData.food
+                })
+            });
+        }
+
+        // Send Expense Data
+        if (allData.expenses.length > 0) {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'saveExpenseData',
+                    userId: appState.userId,
+                    date: healthEntry.date,
+                    data: allData.expenses
+                })
+            });
+        }
+
+        showSuccessMessage('✅ Data saved successfully to Google Sheets!');
+    } catch (error) {
+        console.error('Error saving to Sheets:', error);
+        showSuccessMessage('⚠️ Saved locally, but failed to sync to Google Sheets.');
+    }
 
     // Reset form
     document.getElementById('mainForm').reset();
@@ -431,6 +476,10 @@ function handleFormSubmit(e) {
 
     // Update dashboard
     updateDashboard();
+
+    // Restore button
+    submitBtn.innerHTML = originalBtnText;
+    submitBtn.disabled = false;
 }
 
 function showSuccessMessage(message) {
@@ -495,7 +544,7 @@ function updateDashboard() {
 
     // Update spending
     const totalSpent = todayExpenses.reduce((sum, exp) => sum + (exp.amount || 0), 0);
-    document.getElementById('todaySpent').textContent = '₹' + Math.round(totalSpent);
+    document.getElementById('todaySpent').textContent = '£' + Math.round(totalSpent);
     document.getElementById('spendProgress').style.width = Math.min((totalSpent / appState.goals.budgetLimit) * 100, 100) + '%';
 
     // Update insights
@@ -538,7 +587,7 @@ function updateInsights(health, food, expenses) {
     if (expenses.length > 0) {
         const totalSpent = expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0);
         if (totalSpent > appState.goals.budgetLimit) {
-            insights.push(`💰 Budget exceeded! Spent ₹${totalSpent} vs limit ₹${appState.goals.budgetLimit}`);
+            insights.push(`💰 Budget exceeded! Spent £${totalSpent} vs limit £${appState.goals.budgetLimit}`);
         }
     }
 
@@ -814,27 +863,77 @@ function loadGoalsUI() {
     document.getElementById('budgetLimit').value = appState.goals.budgetLimit;
     document.getElementById('targetCalories').value = appState.goals.targetCalories;
 
+        // Fetch all health data from localStorage to ensure it's up to date
+        const allKeys = Object.keys(localStorage);
+        const userKeys = allKeys.filter(key => key.startsWith(`data_${appState.userId}_`));
+        
+        const allHealthEntries = [];
+        userKeys.forEach(key => {
+            const data = JSON.parse(localStorage.getItem(key));
+            if (data && data.health) {
+                allHealthEntries.push(data.health);
+            }
+        });
+
+        // Get latest data for Goal vs Actual
+        const sortedHealth = allHealthEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const latestHealth = sortedHealth[0] || null;
+        const actualWeight = latestHealth?.weight || 0;
+        
+        // Find most recent height > 0 to calculate BMI
+        const entryWithHeight = sortedHealth.find(entry => entry.height > 0);
+        const actualHeight = entryWithHeight ? entryWithHeight.height : 0;
+
+        let bmiText = "N/A";
+        if (actualWeight > 0 && actualHeight > 0) {
+            const heightM = actualHeight / 100;
+            const bmi = (actualWeight / (heightM * heightM)).toFixed(1);
+            let status = "Normal";
+            if (bmi < 18.5) status = "Underweight";
+            else if (bmi >= 25 && bmi < 30) status = "Overweight";
+            else if (bmi >= 30) status = "Obese";
+            bmiText = `${bmi} (${status})`;
+        }
+
+        // Get today's data for steps, calories, budget
+        const today = new Date().toISOString().split('T')[0];
+        const todayDataStr = localStorage.getItem(`data_${appState.userId}_${today}`);
+        let actualSteps = 0;
+        let actualCalories = 0;
+        let actualSpent = 0;
+
+        if (todayDataStr) {
+            const parsed = JSON.parse(todayDataStr);
+            actualSteps = parsed.health?.steps || 0;
+            actualCalories = (parsed.food || []).reduce((sum, f) => sum + (f.calories || 0), 0);
+            actualSpent = (parsed.expenses || []).reduce((sum, e) => sum + (e.amount || 0), 0);
+        }
+
     // Show progress
     const goalsContainer = document.getElementById('goalsContainer');
     goalsContainer.innerHTML = `
         <div class="stat-card" style="border: 1px solid #e0e0e0;">
-            <div class="stat-label">Target Weight</div>
-            <div class="stat-value">${appState.goals.targetWeight} kg</div>
+                <div class="stat-label">Weight (Goal vs Actual)</div>
+                <div class="stat-value" style="font-size: 1.5rem;">🎯 ${appState.goals.targetWeight} kg | ⚖️ ${actualWeight} kg</div>
+                <div class="stat-subtext">BMI: ${bmiText}</div>
         </div>
 
         <div class="stat-card" style="border: 1px solid #e0e0e0;">
-            <div class="stat-label">Daily Steps Goal</div>
-            <div class="stat-value">${appState.goals.dailyStepsGoal.toLocaleString()}</div>
+                <div class="stat-label">Daily Steps (Goal vs Actual)</div>
+                <div class="stat-value" style="font-size: 1.5rem;">🎯 ${appState.goals.dailyStepsGoal.toLocaleString()} | 👣 ${actualSteps.toLocaleString()}</div>
+                <div class="stat-subtext">${actualSteps >= appState.goals.dailyStepsGoal ? '✅ Goal Met!' : '⏳ Keep walking!'}</div>
         </div>
 
         <div class="stat-card" style="border: 1px solid #e0e0e0;">
-            <div class="stat-label">Daily Budget</div>
-            <div class="stat-value">₹${appState.goals.budgetLimit}</div>
+                <div class="stat-label">Daily Budget (Goal vs Actual)</div>
+                <div class="stat-value" style="font-size: 1.5rem;">🎯 £${appState.goals.budgetLimit} | 💸 £${actualSpent}</div>
+                <div class="stat-subtext">${actualSpent <= appState.goals.budgetLimit ? '✅ Within budget' : '⚠️ Over budget'}</div>
         </div>
 
         <div class="stat-card" style="border: 1px solid #e0e0e0;">
-            <div class="stat-label">Target Calories</div>
-            <div class="stat-value">${appState.goals.targetCalories}</div>
+                <div class="stat-label">Daily Calories (Goal vs Actual)</div>
+                <div class="stat-value" style="font-size: 1.5rem;">🎯 ${appState.goals.targetCalories} | 🔥 ${actualCalories}</div>
+                <div class="stat-subtext">${actualCalories <= appState.goals.targetCalories ? '✅ On track' : '⚠️ Over target'}</div>
         </div>
     `;
 }

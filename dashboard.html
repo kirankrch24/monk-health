@@ -500,8 +500,8 @@
 
                     <div class="stat-card">
                         <div class="stat-label">Daily Spending</div>
-                        <div class="stat-value" id="todaySpent">₹0</div>
-                        <div class="stat-subtext">Budget: ₹500</div>
+                        <div class="stat-value" id="todaySpent">£0</div>
+                        <div class="stat-subtext">Budget: £500</div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="spendProgress"></div>
                         </div>
@@ -572,10 +572,6 @@
                                 <label>Water Intake (liters)</label>
                                 <input type="number" id="waterIntakeLiters" min="0" step="0.5" placeholder="0" required>
                             </div>
-                            <div class="form-group">
-                                <label>Weight (kg)</label>
-                                <input type="number" id="weight" min="0" step="0.1" placeholder="0" required>
-                            </div>
                         </div>
 
                         <div class="form-row">
@@ -618,6 +614,25 @@
                             <div class="form-group">
                                 <label>Daily Total Spent</label>
                                 <input type="number" id="dailyTotalSpent" readonly style="background: #e0e0e0; font-size: 1.2rem; font-weight: bold;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: BODY METRICS -->
+                    <div class="form-section">
+                        <h2>📏 Section 4: Body Metrics</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Current Weight (kg)</label>
+                                <input type="number" id="weight" min="0" step="0.1" placeholder="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Height (cm)</label>
+                                <input type="number" id="height" min="0" step="0.1" placeholder="170">
+                            </div>
+                            <div class="form-group">
+                                <label>Waist Size (cm) - Optional</label>
+                                <input type="number" id="waist" min="0" step="0.1" placeholder="0">
                             </div>
                         </div>
                     </div>
@@ -671,7 +686,7 @@
                             <input type="number" id="dailyStepsGoal" min="0" step="100" placeholder="10000">
                         </div>
                         <div class="form-group">
-                            <label>Daily Budget Limit (₹)</label>
+                            <label>Daily Budget Limit (£)</label>
                             <input type="number" id="budgetLimit" min="0" step="10" placeholder="500">
                         </div>
                         <div class="form-group">
